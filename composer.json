@@ -3,6 +3,6 @@
     "description": "Authentication source for niif:VHO",
     "type": "simplesamlphp-module",
     "require": {
-        "simplesamlphp/composer-module-installer": "~1.0",
+        "simplesamlphp/composer-module-installer": "~1.0"
     }
 }
