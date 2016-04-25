@@ -27,7 +27,8 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
      * @param array $info  Information about this authentication source.
      * @param array $config  Configuration.
      */
-    public function __construct($info, $config) {
+    public function __construct($info, $config)
+    {
         assert('is_array($info)');
         assert('is_array($config)');
 
@@ -43,7 +44,8 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
      *
      * @return array|NULL  The user's attributes, or NULL if the user isn't authenticated.
      */
-    private function getUser() {
+    private function getUser()
+    {
 
         /*
          * In this example we assume that the attributes are
@@ -72,11 +74,12 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
      *
      * @param array &$state  Information about the current authentication.
      */
-    public function authenticate(&$state) {
+    public function authenticate(&$state)
+    {
         assert('is_array($state)');
 
         $attributes = $this->getUser();
-        if ($attributes !== NULL) {
+        if ($attributes !== null) {
             /*
              * The user is already authenticated.
              *
@@ -129,9 +132,7 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          * This is in the configuration file.
          */
         
-        // $authPage = SimpleSAML_Module::getModuleURL('authVHO/authpage.php');
-        // $authPage = $config->get('vho_login_url');
-        $authPage = 'https://project.local/app_dev.php/loginForIdp';
+        $authPage = $config->get('vho_login_url');
 
         /*
          * The redirect to the authentication page.
@@ -158,8 +159,8 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
      *
      * @param array &$state  The authentication state.
      */
-    public static function resume() {
-
+    public static function resume()
+    {
         /*
          * First we need to restore the $state-array. We should have the identifier for
          * it in the 'State' request parameter.
@@ -181,7 +182,7 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          * source.
          */
         $source = SimpleSAML_Auth_Source::getById($state['authVHO:AuthID']);
-        if ($source === NULL) {
+        if ($source === null) {
             /*
              * The only way this should fail is if we remove or rename the authentication source
              * while the user is at the login page.
@@ -205,7 +206,7 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          * First we check that the user is acutally logged in, and didn't simply skip the login page.
          */
         $attributes = $source->getUser();
-        if ($attributes === NULL) {
+        if ($attributes === null) {
             /*
              * The user isn't authenticated.
              *
@@ -236,7 +237,8 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
      *
      * @param array &$state  The logout state array.
      */
-    public function logout(&$state) {
+    public function logout(&$state)
+    {
         assert('is_array($state)');
 
         if (!session_id()) {
@@ -254,5 +256,4 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          * here, but in this example we don't need to do this.
          */
     }
-
 }

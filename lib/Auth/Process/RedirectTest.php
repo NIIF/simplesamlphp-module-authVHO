@@ -4,7 +4,7 @@
  * A simple processing filter for testing that redirection works as it should.
  *
  */
-class sspmod_exampleauth_Auth_Process_RedirectTest extends SimpleSAML_Auth_ProcessingFilter {
+class sspmod_authVHO_Auth_Process_RedirectTest extends SimpleSAML_Auth_ProcessingFilter {
 
 
 	/**
@@ -20,8 +20,8 @@ class sspmod_exampleauth_Auth_Process_RedirectTest extends SimpleSAML_Auth_Proce
 		$state['Attributes']['RedirectTest1'] = array('OK');
 
 		// Save state and redirect
-		$id = SimpleSAML_Auth_State::saveState($state, 'exampleauth:redirectfilter-test');
-		$url = SimpleSAML_Module::getModuleURL('exampleauth/redirecttest.php');
+		$id = SimpleSAML_Auth_State::saveState($state, 'authVHO:redirectfilter-test');
+		$url = SimpleSAML_Module::getModuleURL('authVHO/redirecttest.php');
 		\SimpleSAML\Utils\HTTP::redirectTrustedURL($url, array('StateId' => $id));
 	}
 
