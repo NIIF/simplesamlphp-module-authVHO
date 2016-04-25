@@ -1,5 +1,5 @@
 {
-    "name": "niif/simplesamlphp-module-authVHO",
+    "name": "niif/simplesamlphp-module-authvho",
     "description": "Authentication source for niif:VHO",
     "type": "simplesamlphp-module",
     "require": {
