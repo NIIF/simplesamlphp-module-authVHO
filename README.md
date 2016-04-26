@@ -1,11 +1,15 @@
-SSP IdP authsource for aai/vho
+# SSP IdP authsource for aai/vho
 
-composer require niif/simplesamlphp-module-authVHO
+## Install
+
+`composer require niif/simplesamlphp-module-authvho`
+
+## Configure
 
 config/authsources.php
 
 ```
-'authVHO' => array(
+'default-sp' => array(
              'authVHO:authVHO',
              'vho_login_url' => 'https://your.vho.com/loginForIdp'
          ),
