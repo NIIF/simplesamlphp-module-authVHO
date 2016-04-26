@@ -1,12 +1,13 @@
 <?php
 namespace SimpleSAML\Module\authVHO\Auth\Source;
 
-use SimpleSAML\Auth\Source;
-use SimpleSAML\Auth\State;
 use SimpleSAML\Module;
 use SimpleSAML\Utils\HTTP;
-use SimpleSAML\Error\BadRequest;
-use SimpleSAML\Error\Exception;
+
+use SimpleSAML_Error_BadRequest;
+use SimpleSAML_Error_Exception;
+use SimpleSAML_Auth_Source;
+use SimpleSAML_Auth_State;
 
 /**
  * Example external authentication source.
@@ -64,7 +65,7 @@ class authVHO extends Source {
         }
         if (!isset($_GET['attributes'])) {
             /* The user isn't authenticated. */
-            return NULL;
+            return null;
         }
 
         $encoded_attributes = $_GET['attributes'];
@@ -120,7 +121,7 @@ class authVHO extends Source {
          * and restores it in another location, and thus bypasses steps in
          * the authentication process.
          */
-        $stateId = State::saveState($state, 'authVHO:AuthID');
+        $stateId = SimpleSAML_Auth_State::saveState($state, 'authVHO:AuthID');
 
         /*
          * Now we generate a URL the user should return to after authentication.
@@ -171,7 +172,7 @@ class authVHO extends Source {
          * it in the 'State' request parameter.
          */
         if (!isset($_REQUEST['State'])) {
-            throw new BadRequest('Missing "State" parameter.');
+            throw new Simplesaml_Error_BadRequest('Missing "State" parameter.');
         }
 
         /*
@@ -180,19 +181,19 @@ class authVHO extends Source {
          */
         // var_dump($_REQUEST['State']);exit;
 
-        $state = State::loadState($_REQUEST['State'], 'authVHO:AuthID');
+        $state = SimpleSAML_Auth_State::loadState($_REQUEST['State'], 'authVHO:AuthID');
 
         /*
          * Now we have the $state-array, and can use it to locate the authentication
          * source.
          */
-        $source = Source::getById($state['authVHO:AuthID']);
+        $source = SimpleSAML_Auth_Source::getById($state['authVHO:AuthID']);
         if ($source === null) {
             /*
              * The only way this should fail is if we remove or rename the authentication source
              * while the user is at the login page.
              */
-            throw new Exception('Could not find authentication source with id ' . $state[self::AUTHID]);
+            throw new SimpleSAML_Error_Exception('Could not find authentication source with id ' . $state[self::AUTHID]);
         }
 
         /*
@@ -201,7 +202,7 @@ class authVHO extends Source {
          * change config/authsources.php while an user is logging in.
          */
         if (! ($source instanceof self)) {
-            throw new Exception('Authentication source type changed.');
+            throw new SimpleSAML_Error_Exception('Authentication source type changed.');
         }
 
 
@@ -218,7 +219,7 @@ class authVHO extends Source {
              * Here we simply throw an exception, but we could also redirect the user back to the
              * login page.
              */
-            throw new Exception('User not authenticated after login page.');
+            throw new SimpleSAML_Error_Exception('User not authenticated after login page.');
         }
 
         /*
@@ -227,7 +228,7 @@ class authVHO extends Source {
          */
 
         $state['Attributes'] = $attributes;
-        Source::completeAuth($state);
+        SimpleSAML_Auth_Source::completeAuth($state);
 
         /*
          * The completeAuth-function never returns, so we never get this far.
