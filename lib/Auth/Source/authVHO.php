@@ -1,25 +1,19 @@
 <?php
+namespace SimpleSAML\Module\authVHO\Auth\Source;
 
 /**
  * Example external authentication source.
  *
- * This class is an example authentication source which is designed to
- * hook into an external authentication system.
+ * This class is an authentication source which is designed to
+ * hook into an niif:VHO external authentication system.
  *
- * To adapt this to your own web site, you should:
- * 1. Create your own module directory.
- * 2. Add a file "default-enable" to that directory.
- * 3. Copy this file and modules/authVHO/www/resume.php to their corresponding
- *    location in the new module.
- * 4. Replace all occurrences of "authVHO" in this file and in resume.php with the name of your module.
- * 5. Adapt the getUser()-function, the authenticate()-function and the logout()-function to your site.
- * 6. Add an entry in config/authsources.php referencing your module. E.g.:
+ *  Add an entry in config/authsources.php referencing your module. E.g.:
  *        'authVHO' => array(
  *            'authVHO:authVHO',
  *        ),
  *
  */
-class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
+class authVHO extends SimpleSAML_Auth_Source {
 
     /**
      * Constructor for this authentication source.
