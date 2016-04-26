@@ -1,6 +1,13 @@
 <?php
 namespace SimpleSAML\Module\authVHO\Auth\Source;
 
+use SimpleSAML\Auth\Source;
+use SimpleSAML\Auth\State;
+use SimpleSAML\Module;
+use SimpleSAML\Utils\HTTP;
+use SimpleSAML\Error\BadRequest;
+use SimpleSAML\Error\Exception;
+
 /**
  * Example external authentication source.
  *
@@ -13,7 +20,9 @@ namespace SimpleSAML\Module\authVHO\Auth\Source;
  *        ),
  *
  */
-class authVHO extends SimpleSAML_Auth_Source {
+class authVHO extends Source {
+
+    private $config;
 
     /**
      * Constructor for this authentication source.
@@ -28,6 +37,8 @@ class authVHO extends SimpleSAML_Auth_Source {
 
         // Call the parent constructor first, as required by the interface
         parent::__construct($info, $config);
+
+        $this->config = $config;
 
         // Do any other configuration we need here
     }
@@ -109,14 +120,14 @@ class authVHO extends SimpleSAML_Auth_Source {
          * and restores it in another location, and thus bypasses steps in
          * the authentication process.
          */
-        $stateId = SimpleSAML_Auth_State::saveState($state, 'authVHO:AuthID');
+        $stateId = State::saveState($state, 'authVHO:AuthID');
 
         /*
          * Now we generate a URL the user should return to after authentication.
          * We assume that whatever authentication page we send the user to has an
          * option to return the user to a specific page afterwards.
          */
-        $returnTo = SimpleSAML_Module::getModuleURL('authVHO/resume.php', array(
+        $returnTo = Module::getModuleURL('authVHO/resume.php', array(
             'State' => $stateId,
         ));
 
@@ -126,7 +137,7 @@ class authVHO extends SimpleSAML_Auth_Source {
          * This is in the configuration file.
          */
         
-        $authPage = $config->get('vho_login_url');
+        $authPage = $this->config['vho_login_url'];
 
         /*
          * The redirect to the authentication page.
@@ -134,7 +145,7 @@ class authVHO extends SimpleSAML_Auth_Source {
          * Note the 'ReturnTo' parameter. This must most likely be replaced with
          * the real name of the parameter for the login page.
          */
-        \SimpleSAML\Utils\HTTP::redirectTrustedURL($authPage, array(
+        HTTP::redirectTrustedURL($authPage, array(
             'ReturnTo' => $returnTo
         ));
 
@@ -160,7 +171,7 @@ class authVHO extends SimpleSAML_Auth_Source {
          * it in the 'State' request parameter.
          */
         if (!isset($_REQUEST['State'])) {
-            throw new SimpleSAML_Error_BadRequest('Missing "State" parameter.');
+            throw new BadRequest('Missing "State" parameter.');
         }
 
         /*
@@ -169,19 +180,19 @@ class authVHO extends SimpleSAML_Auth_Source {
          */
         // var_dump($_REQUEST['State']);exit;
 
-        $state = SimpleSAML_Auth_State::loadState($_REQUEST['State'], 'authVHO:AuthID');
+        $state = State::loadState($_REQUEST['State'], 'authVHO:AuthID');
 
         /*
          * Now we have the $state-array, and can use it to locate the authentication
          * source.
          */
-        $source = SimpleSAML_Auth_Source::getById($state['authVHO:AuthID']);
+        $source = Source::getById($state['authVHO:AuthID']);
         if ($source === null) {
             /*
              * The only way this should fail is if we remove or rename the authentication source
              * while the user is at the login page.
              */
-            throw new SimpleSAML_Error_Exception('Could not find authentication source with id ' . $state[self::AUTHID]);
+            throw new Exception('Could not find authentication source with id ' . $state[self::AUTHID]);
         }
 
         /*
@@ -190,7 +201,7 @@ class authVHO extends SimpleSAML_Auth_Source {
          * change config/authsources.php while an user is logging in.
          */
         if (! ($source instanceof self)) {
-            throw new SimpleSAML_Error_Exception('Authentication source type changed.');
+            throw new Exception('Authentication source type changed.');
         }
 
 
@@ -207,7 +218,7 @@ class authVHO extends SimpleSAML_Auth_Source {
              * Here we simply throw an exception, but we could also redirect the user back to the
              * login page.
              */
-            throw new SimpleSAML_Error_Exception('User not authenticated after login page.');
+            throw new Exception('User not authenticated after login page.');
         }
 
         /*
@@ -216,7 +227,7 @@ class authVHO extends SimpleSAML_Auth_Source {
          */
 
         $state['Attributes'] = $attributes;
-        SimpleSAML_Auth_Source::completeAuth($state);
+        Source::completeAuth($state);
 
         /*
          * The completeAuth-function never returns, so we never get this far.
