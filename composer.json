@@ -7,5 +7,16 @@
     },
     "autoload": {
         "psr-4": {"SimpleSAML\\Module\\authVHO\\": "lib"}
+    },
+    "require-dev": {
+        "simplesamlphp/simplesamlphp": "1.14",
+        "phpunit/phpunit": "~3.7"
+    },
+    "autoload-dev": {
+      "files": ["tests/_autoload_modules.php"]
+    },
+    "support": {
+        "issues": "https://github.com/NIIF/simplesamlphp-module-authVHO/issues",
+        "source": "https://github.com/NIIF/simplesamlphp-module-authVHO"
     }
 }
