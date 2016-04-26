@@ -21,7 +21,7 @@ use SimpleSAML_Auth_State;
  *        ),
  *
  */
-class authVHO extends Source {
+class authVHO extends SimpleSAML_Auth_Source {
 
     private $config;
 
