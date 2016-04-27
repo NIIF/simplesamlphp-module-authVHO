@@ -6,7 +6,7 @@ config/authsources.php
 
 ```
 'authVHO' => array(
-             'authVHO:authVHO',
+             'authvho:authVHO',
              'vho_login_url' => 'https://your.vho.com/loginForIdp'
          ),
 ```

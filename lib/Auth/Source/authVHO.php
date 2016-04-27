@@ -19,8 +19,9 @@
  *        ),
  *
  */
-class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
+class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
 
+    private $config;
     /**
      * Constructor for this authentication source.
      *
@@ -35,7 +36,7 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
         // Call the parent constructor first, as required by the interface
         parent::__construct($info, $config);
 
-        // Do any other configuration we need here
+        $this->config = $config;
     }
 
 
@@ -122,7 +123,7 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          * We assume that whatever authentication page we send the user to has an
          * option to return the user to a specific page afterwards.
          */
-        $returnTo = SimpleSAML_Module::getModuleURL('authVHO/resume.php', array(
+        $returnTo = SimpleSAML_Module::getModuleURL('authvho/resume.php', array(
             'State' => $stateId,
         ));
 
@@ -132,7 +133,7 @@ class sspmod_authVHO_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          * This is in the configuration file.
          */
         
-        $authPage = $config->get('vho_login_url');
+        $authPage = $this->config['vho_login_url'];
 
         /*
          * The redirect to the authentication page.
