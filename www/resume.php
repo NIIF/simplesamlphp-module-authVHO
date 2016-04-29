@@ -8,4 +8,4 @@
  *
  * @package SimpleSAMLphp
  */
-sspmod_authVHO_Auth_Source_authVHO::resume();
+sspmod_authvho_Auth_Source_authVHO::resume();
