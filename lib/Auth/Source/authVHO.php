@@ -1,32 +1,37 @@
 <?php
-
 /**
- * Example external authentication source.
+ * AuthVHO.php File Doc Comment
  *
- * This class is an example authentication source which is designed to
- * hook into an external authentication system.
+ * PHP version 5
  *
- * To adapt this to your own web site, you should:
- * 1. Create your own module directory.
- * 2. Add a file "default-enable" to that directory.
- * 3. Copy this file and modules/authVHO/www/resume.php to their corresponding
- *    location in the new module.
- * 4. Replace all occurrences of "authVHO" in this file and in resume.php with the name of your module.
- * 5. Adapt the getUser()-function, the authenticate()-function and the logout()-function to your site.
- * 6. Add an entry in config/authsources.php referencing your module. E.g.:
- *        'authVHO' => array(
- *            'authVHO:authVHO',
- *        ),
- *
+ * @category PHP
+ * @package  AuthVHO
+ * @author   Szabó Gyula <gyufi@niif.hu>
+ * @license  MIT Licence
+ * @link     https://github.com/NIIF/simplesamlphp-module-authVHO
  */
-class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
+ 
+ /**
+ * 6. Add an entry in config/authsources.php referencing your module. E.g.:
+ *        'default-sp' => array(
+ *            'authvho:authVHO',
+ *        ),
+  *
+ * @category PHP
+ * @package  AuthVHO
+ * @author   Szabó Gyula <gyufi@niif.hu>
+ * @license  MIT Licence
+ * @link     https://github.com/NIIF/simplesamlphp-module-authVHO
+ */
+class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source
+{
 
     private $config;
     /**
      * Constructor for this authentication source.
      *
-     * @param array $info  Information about this authentication source.
-     * @param array $config  Configuration.
+     * @param array $info   Information about this authentication source.
+     * @param array $config Configuration.
      */
     public function __construct($info, $config)
     {
@@ -43,7 +48,8 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
     /**
      * Retrieve attributes for the user.
      *
-     * @return array|NULL  The user's attributes, or NULL if the user isn't authenticated.
+     * @return array|NULL  The user's attributes, or
+     *         NULL if the user isn't authenticated.
      */
     private function getUser()
     {
@@ -60,7 +66,7 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
         }
         if (!isset($_GET['attributes'])) {
             /* The user isn't authenticated. */
-            return NULL;
+            return null;
         }
 
         $encoded_attributes = $_GET['attributes'];
@@ -73,9 +79,11 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
     /**
      * Log in using an external authentication helper.
      *
-     * @param array &$state  Information about the current authentication.
+     * @param array $state Information about the current authentication.
+     *
+     * @return void
      */
-    public function authenticate(&$state)
+    public function authenticate($state)
     {
         assert('is_array($state)');
 
@@ -123,16 +131,18 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          * We assume that whatever authentication page we send the user to has an
          * option to return the user to a specific page afterwards.
          */
-        $returnTo = SimpleSAML_Module::getModuleURL('authvho/resume.php', array(
+        $returnTo = SimpleSAML_Module::getModuleURL(
+            'authvho/resume.php', array(
             'State' => $stateId,
-        ));
+            )
+        );
 
         /*
          * Get the URL of the VHO authentication page.
          *
          * This is in the configuration file.
          */
-        
+
         $authPage = $this->config['vho_login_url'];
 
         /*
@@ -141,9 +151,11 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          * Note the 'ReturnTo' parameter. This must most likely be replaced with
          * the real name of the parameter for the login page.
          */
-        \SimpleSAML\Utils\HTTP::redirectTrustedURL($authPage, array(
+        \SimpleSAML\Utils\HTTP::redirectTrustedURL(
+            $authPage, array(
             'ReturnTo' => $returnTo
-        ));
+            )
+        );
 
         /*
          * The redirect function never returns, so we never get this far.
@@ -158,13 +170,13 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
      * This function resumes the authentication process after the user has
      * entered his or her credentials.
      *
-     * @param array &$state  The authentication state.
+     * @return void
      */
     public static function resume()
     {
         /*
-         * First we need to restore the $state-array. We should have the identifier for
-         * it in the 'State' request parameter.
+         * First we need to restore the $state-array.
+         * We should have the identifier for it in the 'State' request parameter.
          */
         if (!isset($_REQUEST['State'])) {
             throw new SimpleSAML_Error_BadRequest('Missing "State" parameter.');
@@ -176,19 +188,25 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          */
         // var_dump($_REQUEST['State']);exit;
 
-        $state = SimpleSAML_Auth_State::loadState($_REQUEST['State'], 'authVHO:AuthID');
+        $state = SimpleSAML_Auth_State::loadState(
+            $_REQUEST['State'],
+            'authVHO:AuthID'
+        );
 
         /*
-         * Now we have the $state-array, and can use it to locate the authentication
-         * source.
+         * Now we have the $state-array, and can use it to locate
+         * the authentication source.
          */
         $source = SimpleSAML_Auth_Source::getById($state['authVHO:AuthID']);
         if ($source === null) {
             /*
-             * The only way this should fail is if we remove or rename the authentication source
-             * while the user is at the login page.
+             * The only way this should fail is if we remove or rename
+             * the authentication source while the user is at the login page.
              */
-            throw new SimpleSAML_Error_Exception('Could not find authentication source with id ' . $state[self::AUTHID]);
+            throw new SimpleSAML_Error_Exception(
+                'Could not find authentication source with id '
+                . $state[self::AUTHID]
+            );
         }
 
         /*
@@ -197,28 +215,36 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
          * change config/authsources.php while an user is logging in.
          */
         if (! ($source instanceof self)) {
-            throw new SimpleSAML_Error_Exception('Authentication source type changed.');
+            throw new SimpleSAML_Error_Exception(
+                'Authentication source type changed.'
+            );
         }
 
 
         /*
-         * OK, now we know that our current state is sane. Time to actually log the user in.
+         * OK, now we know that our current state is sane. Time to actually
+         * log the user in.
          *
-         * First we check that the user is acutally logged in, and didn't simply skip the login page.
+         * First we check that the user is acutally logged in, and didn't
+         * simply skip the login page.
          */
         $attributes = $source->getUser();
         if ($attributes === null) {
             /*
              * The user isn't authenticated.
              *
-             * Here we simply throw an exception, but we could also redirect the user back to the
+             * Here we simply throw an exception, but we could also
+             * redirect the user back to the
              * login page.
              */
-            throw new SimpleSAML_Error_Exception('User not authenticated after login page.');
+            throw new SimpleSAML_Error_Exception(
+                'User not authenticated after login page.'
+            );
         }
 
         /*
-         * So, we have a valid user. Time to resume the authentication process where we
+         * So, we have a valid user. Time to resume the authentication
+         * process where we
          * paused it in the authenticate()-function above.
          */
 
@@ -236,9 +262,11 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source {
      * This function is called when the user start a logout operation, for example
      * by logging out of a SP that supports single logout.
      *
-     * @param array &$state  The logout state array.
+     * @param array $state The logout state array.
+     *
+     * @return void
      */
-    public function logout(&$state)
+    public function logout($state)
     {
         assert('is_array($state)');
 

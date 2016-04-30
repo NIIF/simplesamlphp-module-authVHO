@@ -1,0 +1,16 @@
+language: php
+php:
+- 5.3
+- 5.4
+- 5.5
+- 5.6
+- 7.0
+- hhvm
+matrix:
+  allow_failures:
+  - php: hhvm
+before_script: composer update --dev \
+  && rm ./vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidClassNameSniff.php \
+  && rm ./vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php \
+  && rm ./vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidVariableNameSniff.php
+script: php /vendor/bin/phpcs lib/Auth/Source

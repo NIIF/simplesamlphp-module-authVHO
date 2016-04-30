@@ -4,5 +4,10 @@
     "type": "simplesamlphp-module",
     "require": {
         "simplesamlphp/composer-module-installer": "~1.0"
+    },
+    "require-dev": {
+        "simplesamlphp/simplesamlphp": "^1.14",
+        "phpunit/phpunit": "~3.7",
+        "squizlabs/php_codesniffer": "*"
     }
 }
