@@ -83,7 +83,7 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source
      *
      * @return void
      */
-    public function authenticate($state)
+    public function authenticate(&$state)
     {
         assert('is_array($state)');
 
@@ -266,7 +266,7 @@ class sspmod_authvho_Auth_Source_authVHO extends SimpleSAML_Auth_Source
      *
      * @return void
      */
-    public function logout($state)
+    public function logout(&$state)
     {
         assert('is_array($state)');
 
