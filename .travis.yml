@@ -9,8 +9,5 @@ php:
 matrix:
   allow_failures:
   - php: hhvm
-before_script: composer update --dev \
-  && rm ./vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidClassNameSniff.php \
-  && rm ./vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php \
-  && rm ./vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidVariableNameSniff.php
-script: php /vendor/bin/phpcs lib/Auth/Source
+before_script: composer update --dev && rm vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidClassNameSniff.php && rm vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php && rm vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidVariableNameSniff.php
+script: php vendor/bin/phpcs lib/Auth/Source
